@@ -8,38 +8,44 @@
 import UIKit
 
 
-class ViewController: UIViewController {
+final class ViewController: UIViewController {
     
-    @IBOutlet weak var counterLabel: UILabel!
-    @IBOutlet weak var addButton: UIButton!
-    @IBOutlet weak var reduceButton: UIButton!
-    @IBOutlet weak var resetButton: UIButton!
-    @IBOutlet weak var historyTextView: UITextView!
+    @IBOutlet private weak var counterLabel: UILabel!
+    @IBOutlet private weak var addButton: UIButton!
+    @IBOutlet private weak var reduceButton: UIButton!
+    @IBOutlet private weak var resetButton: UIButton!
+    @IBOutlet private weak var historyTextView: UITextView!
     
-    var counter: Int = 0
-    var currentDate: String {
-            return calculateDate()
-        }
+    private var counter: Int = 0
+    private var currentDate: String {
+        return calculateDate()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
         counterLabel.text = "0"
     }
     
-    func scrollToVisibleText() {
+    private func scrollToVisibleText() {
         let range = NSMakeRange(historyTextView.text.count - 1, 0)
         historyTextView.scrollRangeToVisible(range)
     }
+    
+    private func calculateDate() -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd-MM-yyyy HH:mm:ss"
+        let timeString = dateFormatter.string(from: Date())
+        return timeString
+    }
 
-    @IBAction func addButtonDidTap() {
+    @IBAction private func addButtonDidTap() {
         counter += 1
         counterLabel.text = "Значение счётчика: \(counter)"
         historyTextView.text.append("\n[\(currentDate)]: значение изменено на +1")
         scrollToVisibleText()
     }
     
-    @IBAction func reduceButtonDidTap() {
+    @IBAction private func reduceButtonDidTap() {
         if counter > 0 {
             counter -= 1
             counterLabel.text = "Значение счётчика: \(counter)"
@@ -51,7 +57,7 @@ class ViewController: UIViewController {
         scrollToVisibleText()
     }
     
-    @IBAction func resetButtonDidTap() {
+    @IBAction private func resetButtonDidTap() {
         if counter != 0 {
             counter = 0
             counterLabel.text = "Значение счётчика: \(counter)"
@@ -59,11 +65,4 @@ class ViewController: UIViewController {
             scrollToVisibleText()
         }
     }
-}
-
-private func calculateDate() -> String {
-    let dateFormatter = DateFormatter()
-    dateFormatter.dateFormat = "dd-MM-yyyy HH:mm:ss"
-    let timeString = dateFormatter.string(from: Date())
-    return timeString
 }
